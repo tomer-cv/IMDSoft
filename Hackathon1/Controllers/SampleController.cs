@@ -7,7 +7,7 @@ namespace Hackathon1.Controllers;
 [Route("api/[controller]")]
 public class SampleController : ControllerBase
 {
-    private static int _nextId = 1;
+    private static int _nextId = 0;
 
     [HttpGet]
     public IActionResult Get()
@@ -24,7 +24,7 @@ public class SampleController : ControllerBase
     [HttpPost]
     public IActionResult Post([FromBody] ItemDto data)
     {
-        var newId = _nextId++;
+        var newId = System.Threading.Interlocked.Increment(ref _nextId);
         return CreatedAtAction(nameof(GetById), new { id = newId }, new { message = "Item created successfully", id = newId, data });
     }
 
