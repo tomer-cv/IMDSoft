@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Hackathon1.Models;
 
 namespace Hackathon1.Controllers;
 
@@ -6,6 +7,8 @@ namespace Hackathon1.Controllers;
 [Route("api/[controller]")]
 public class SampleController : ControllerBase
 {
+    private static int _nextId = 1;
+
     [HttpGet]
     public IActionResult Get()
     {
@@ -19,13 +22,14 @@ public class SampleController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Post([FromBody] object data)
+    public IActionResult Post([FromBody] ItemDto data)
     {
-        return CreatedAtAction(nameof(GetById), new { id = 1 }, new { message = "Item created successfully", data });
+        var newId = _nextId++;
+        return CreatedAtAction(nameof(GetById), new { id = newId }, new { message = "Item created successfully", id = newId, data });
     }
 
     [HttpPut("{id}")]
-    public IActionResult Put(int id, [FromBody] object data)
+    public IActionResult Put(int id, [FromBody] ItemDto data)
     {
         return Ok(new { message = $"Item {id} updated successfully", data });
     }
