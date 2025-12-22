@@ -75,9 +75,10 @@ namespace PubsBookManager
             SqlConnection conn = new SqlConnection(connStr);
             conn.Open();
 
-            // ISSUE: Critical SQL Injection vulnerability!
-            string sql = "SELECT title, price FROM titles WHERE price >= " + min + " AND price <= " + max;
+            string sql = "SELECT title, price FROM titles WHERE price >= @MinPrice AND price <= @MaxPrice";
             SqlCommand cmd = new SqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@MinPrice", min);
+            cmd.Parameters.AddWithValue("@MaxPrice", max);
             SqlDataReader reader = cmd.ExecuteReader();
 
             Console.WriteLine();
@@ -109,11 +110,14 @@ namespace PubsBookManager
             SqlConnection conn = new SqlConnection(connStr);
             conn.Open();
 
-            // ISSUE: Multiple problems - SQL Injection, hardcoded date, magic string "Net 30"
-            string sql = "INSERT INTO sales (stor_id, ord_num, ord_date, qty, payterms, title_id) VALUES ('"
-                + storeId + "', '" + orderNum + "', '2024-01-01', " + qty + ", 'Net 30', '" + titleId + "')";
+            // ISSUE: hardcoded date, magic string "Net 30"
+            string sql = "INSERT INTO sales (stor_id, ord_num, ord_date, qty, payterms, title_id) VALUES (@StoreId, @OrderNum, '2024-01-01', @Qty, 'Net 30', @TitleId)";
 
             SqlCommand cmd = new SqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@StoreId", storeId);
+            cmd.Parameters.AddWithValue("@OrderNum", orderNum);
+            cmd.Parameters.AddWithValue("@Qty", qty);
+            cmd.Parameters.AddWithValue("@TitleId", titleId);
 
             try
             {
@@ -141,9 +145,10 @@ namespace PubsBookManager
             SqlConnection c = new SqlConnection(connStr);
             c.Open();
 
-            // ISSUE: Critical SQL Injection vulnerability
-            string query = "UPDATE titles SET price = " + price + " WHERE title_id = '" + titleId + "'";
+            string query = "UPDATE titles SET price = @Price WHERE title_id = @TitleId";
             SqlCommand command = new SqlCommand(query, c);
+            command.Parameters.AddWithValue("@Price", price);
+            command.Parameters.AddWithValue("@TitleId", titleId);
             command.ExecuteNonQuery();
 
             Console.WriteLine("Price updated!");
