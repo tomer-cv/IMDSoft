@@ -99,8 +99,9 @@ namespace PubsBookManager
                 string max = Console.ReadLine();
 
                 // ISSUE: No validation - what if user enters "abc"?
-                decimal minPrice = decimal.Parse(min);
-                decimal maxPrice = decimal.Parse(max);
+                // Validate input format (will throw FormatException if invalid)
+                decimal.Parse(min);
+                decimal.Parse(max);
 
                 using (SqlConnection conn = new SqlConnection(connStr))
                 {
@@ -154,7 +155,8 @@ namespace PubsBookManager
                 string qty = Console.ReadLine();
 
                 // ISSUE: No validation - empty strings, invalid formats accepted
-                int quantity = int.Parse(qty);
+                // Validate quantity format (will throw FormatException if invalid)
+                int.Parse(qty);
 
                 using (SqlConnection conn = new SqlConnection(connStr))
                 {
@@ -195,7 +197,8 @@ namespace PubsBookManager
                 string price = Console.ReadLine();
 
                 // ISSUE: No validation
-                decimal newPrice = decimal.Parse(price);
+                // Validate price format (will throw FormatException if invalid)
+                decimal.Parse(price);
 
                 using (SqlConnection c = new SqlConnection(connStr))
                 {
